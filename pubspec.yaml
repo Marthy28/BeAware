@@ -21,8 +21,10 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  motion_tab_bar: ^0.1.5
   flutter:
     sdk: flutter
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -36,7 +38,6 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter.
 flutter:
 
   # The following line ensures that the Material Icons font is
