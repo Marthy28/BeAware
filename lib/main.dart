@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 
 // import 'src/authentication.dart'; // new
 // import 'src/widgets.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'Pages/MainPage.dart';
 
-void main() {
+Future<void> main() async {
   runApp(MyApp());
+  await Firebase.initializeApp();
 }
 
 class MyApp extends StatelessWidget {

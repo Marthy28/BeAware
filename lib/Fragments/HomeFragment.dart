@@ -1,4 +1,3 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
@@ -14,8 +13,7 @@ class Info {
 }
 
 class HomeFragment extends StatelessWidget {
-  final databaseRef =
-      FirebaseDatabase.instance.reference(); //database reference object
+  //database reference object
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +61,7 @@ class HomeFragment extends StatelessWidget {
                 RaisedButton(
                     color: Colors.pinkAccent,
                     child: Text("Scan NFC"),
-                    onPressed: () {
-                      addData("Bigeard", "Scan NFC");
-                    }),
+                    onPressed: null),
               ],
             ),
           ),
@@ -73,9 +69,5 @@ class HomeFragment extends StatelessWidget {
       ),
     );
     throw UnimplementedError();
-  }
-
-  void addData(String name, String action) {
-    databaseRef.push().set({'name': name, 'comment': action});
   }
 }

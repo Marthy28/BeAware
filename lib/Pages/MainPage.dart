@@ -1,6 +1,7 @@
 import 'package:be_aware/Fragments/HistoryFragment.dart';
 import 'package:be_aware/Fragments/HomeFragment.dart';
 import 'package:be_aware/Fragments/ProfileFragment.dart';
+import 'package:be_aware/Util/global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -70,6 +71,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   Widget build(BuildContext context) {
+    auth.signUp("test@mail.com", "123456", "toto");
     return WillPopScope(
       child: Scaffold(
         bottomNavigationBar: MotionTabBar(
@@ -82,11 +84,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               _tabController.index = value;
             });
           },
-          icons: [
-            Icons.hourglass_bottom,
-           Icons.home,
-            Icons.account_circle
-          ],
+          icons: [Icons.hourglass_bottom, Icons.home, Icons.account_circle],
           textStyle: TextStyle(color: Colors.transparent),
         ),
         body: MotionTabBarView(
@@ -111,7 +109,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 .invokeMethod('SystemNavigator.pop'); // close the app
             return true;
           } else {
-            _tabController.index = 0; // back to first tap if current tab history stack is empty
+            _tabController.index =
+                0; // back to first tap if current tab history stack is empty
             setState(() {
               _tabController.index;
             });
