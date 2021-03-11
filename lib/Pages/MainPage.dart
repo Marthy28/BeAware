@@ -71,7 +71,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   Widget build(BuildContext context) {
-    auth.signUp("test@mail.com", "123456", "toto");
+    //auth.signUp("test@mail.com", "123456", "toto");
     return WillPopScope(
       child: Scaffold(
         bottomNavigationBar: MotionTabBar(
