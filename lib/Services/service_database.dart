@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class DBProvider {
   main();
+  Future<DocumentSnapshot> getProfile(String userId);
+  Stream<DocumentSnapshot> alarm();
+  setIsActive(bool isActive);
 }
 
 class DataBase implements DBProvider {
@@ -12,4 +15,24 @@ class DataBase implements DBProvider {
     databaseReference = FirebaseFirestore.instance;
     print("Opened connection!");
   }
+
+  Future<DocumentSnapshot> getProfile(String userId) {
+    return databaseReference.collection("users").doc(userId).get();
+  }
+
+  Stream<DocumentSnapshot> alarm() {
+    return databaseReference
+        .collection("alarms")
+        .doc("xshiCmkPvzXIfBCHiju3")
+        .snapshots();
+  }
+
+  setIsActive(bool isActive) {
+    databaseReference
+        .collection("alarms")
+        .doc("xshiCmkPvzXIfBCHiju3")
+        .update({"isActive": isActive});
+  }
+
+  activeAlarm() {}
 }
