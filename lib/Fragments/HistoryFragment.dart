@@ -21,6 +21,7 @@ class _HistoryFragment extends State<HistoryFragment> {
       ),
     );
   }
+
   Widget _listPersonne(BuildContext context) {
     return Container(
         child: StreamBuilder(
