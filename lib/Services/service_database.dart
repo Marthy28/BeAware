@@ -17,6 +17,12 @@ abstract class DBProvider {
 class DataBase implements DBProvider {
   FirebaseFirestore databaseReference;
 
+  main() async {
+    print("Opening connection ...");
+    databaseReference = FirebaseFirestore.instance;
+    print("Opened connection!");
+  }
+
   Stream<QuerySnapshot> getHistory() {
     return databaseReference
         .collection("alarms")
@@ -25,10 +31,8 @@ class DataBase implements DBProvider {
         .snapshots();
   }
 
-  main() async {
-    print("Opening connection ...");
-    databaseReference = FirebaseFirestore.instance;
-    print("Opened connection!");
+  Future<DocumentSnapshot> getProfile(String userId) {
+    return databaseReference.collection("users").doc(userId).get();
   }
 
   Future<bool> setLastConnexion(User user) {
@@ -83,10 +87,6 @@ class DataBase implements DBProvider {
 
   Future<DocumentSnapshot> getProfilInfo(String profile) {
     return databaseReference.collection("users").doc(profile).get();
-  }
-
-  Future<DocumentSnapshot> getProfile(String userId) {
-    return databaseReference.collection("users").doc(userId).get();
   }
 
   Stream<DocumentSnapshot> alarm() {
