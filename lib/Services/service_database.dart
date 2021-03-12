@@ -6,6 +6,9 @@ abstract class DBProvider {
   Future<bool> setLastConnexion(User user);
   Future<bool> setProfilInfo(User user, {bool firstConnect: false});
   Future<DocumentSnapshot> getProfilInfo(String profile);
+  Future<DocumentSnapshot> getProfile(String userId);
+  Stream<DocumentSnapshot> alarm();
+  setIsActive(bool isActive);
 }
 
 class DataBase implements DBProvider {
@@ -30,7 +33,9 @@ class DataBase implements DBProvider {
     DateTime dateTime = DateTime.now(); //Pour premiere connexion
     String firstName = user.displayName;
     String lastName = "";
-    if (user != null && user.displayName != null && user.displayName.contains(" ")) {
+    if (user != null &&
+        user.displayName != null &&
+        user.displayName.contains(" ")) {
       var fullname = user.displayName.split(" ");
       firstName = fullname[0];
       lastName = fullname[1];
@@ -62,4 +67,24 @@ class DataBase implements DBProvider {
   Future<DocumentSnapshot> getProfilInfo(String profile) {
     return databaseReference.collection("users").doc(profile).get();
   }
+
+  Future<DocumentSnapshot> getProfile(String userId) {
+    return databaseReference.collection("users").doc(userId).get();
+  }
+
+  Stream<DocumentSnapshot> alarm() {
+    return databaseReference
+        .collection("alarms")
+        .doc("xshiCmkPvzXIfBCHiju3")
+        .snapshots();
+  }
+
+  setIsActive(bool isActive) {
+    databaseReference
+        .collection("alarms")
+        .doc("xshiCmkPvzXIfBCHiju3")
+        .update({"isActive": isActive});
+  }
+
+  activeAlarm() {}
 }

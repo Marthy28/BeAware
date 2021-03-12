@@ -1,7 +1,9 @@
+import 'package:be_aware/Util/global.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
 class Info {
   String name;
@@ -13,11 +15,15 @@ class Info {
   }
 }
 
-class HomeFragment extends StatelessWidget {
-  //database reference object
+class HomeFragment extends StatefulWidget {
+  @override
+  _HomeFragmentState createState() => _HomeFragmentState();
+}
 
+class _HomeFragmentState extends State<HomeFragment> {
   @override
   Widget build(BuildContext context) {
+    bool _isActive;
     List<Info> data = [
       new Info("Robin Bigeard"),
       new Info("Robin Bigeard"),
@@ -41,34 +47,52 @@ class HomeFragment extends StatelessWidget {
           ),
           Expanded(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Center(
+                  child: Text(
+                    "Alarme",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 30, top: 10),
+                  child: StreamBuilder(
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        _isActive = snapshot.data["isActive"];
+                        return FlutterSwitch(
+                          width: 120.0,
+                          height: 40.0,
+                          valueFontSize: 18.0,
+                          toggleSize: 20.0,
+                          value: _isActive,
+                          borderRadius: 30.0,
+                          padding: 8.0,
+                          showOnOff: true,
+                          inactiveText: "Inactive",
+                          activeText: "Active",
+                          onToggle: (isActive) {
+                            provider.setIsActive(isActive);
+                          },
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                    stream: provider.alarm(),
+                  ),
+                ),
                 Text(
-                  "Alarme",
+                  "History",
                   style: TextStyle(fontSize: 20),
                 ),
-                LiteRollingSwitch(
-                  value: true,
-                  textOn: 'Active',
-                  textOff: 'Inactive',
-                  colorOn: Colors.red,
-                  colorOff: Colors.blueGrey,
-                  iconOn: Icons.shield,
-                  iconOff: Icons.power_settings_new,
-                  onChanged: (bool state) {
-                    print('turned ${(state) ? 'on' : 'off'}');
-                  },
-                ),
                 for (var w in dataWidget) w,
-                RaisedButton(
-                    color: Colors.pinkAccent,
-                    child: Text("Scan NFC"),
-                    onPressed: null),
               ],
             ),
           ),
         ],
       ),
     );
-    throw UnimplementedError();
   }
 }
