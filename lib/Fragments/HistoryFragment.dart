@@ -26,7 +26,7 @@ class _HistoryFragment extends State<HistoryFragment> {
     return Container(
         child: StreamBuilder(
             stream: provider.getHistory(),
-            builder: (BuildContext, snapshot) {
+            builder: (BuildContext, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
                     itemCount: snapshot.data.docs.length,
@@ -39,16 +39,18 @@ class _HistoryFragment extends State<HistoryFragment> {
             }));
   }
 
-  Widget itemHistory(BuildContext context, DocumentSnapshot document) {
+  Widget itemHistory(BuildContext context, QueryDocumentSnapshot document) {
+    Timestamp test = document.data()["date"];
+    var date = test.toDate().;
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Text(
-        document.data()["user"],
+        document.data()["user_id"],
         textAlign: TextAlign.left,
         style: Theme.of(context).textTheme.bodyText1.copyWith(
             fontSize: 28.0, color: Colors.black, fontWeight: FontWeight.bold),
       ),
       Text(
-        document.data()["date"],
+        date.toString(),
         textAlign: TextAlign.left,
         style: Theme.of(context).textTheme.bodyText1.copyWith(
             fontSize: 28.0, color: Colors.black, fontWeight: FontWeight.bold),

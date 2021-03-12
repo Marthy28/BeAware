@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class DBProvider {
   main();
-  Stream<DocumentSnapshot> getHistory();
+  Stream<QuerySnapshot> getHistory();
   Future<DocumentSnapshot> getProfile(String userId);
   Stream<DocumentSnapshot> alarm();
   setIsActive(bool isActive);
@@ -17,13 +17,14 @@ class DataBase implements DBProvider {
     print("Opened connection!");
   }
 
-  Stream<DocumentSnapshot> getHistory() {
+  Stream<QuerySnapshot> getHistory() {
     return databaseReference
         .collection("alarms")
-        .doc("XkG3PST8SI5fyVcve0Zq")
+        .doc("xshiCmkPvzXIfBCHiju3")
+        .collection("history")
         .snapshots();
   }
-  
+
   Future<DocumentSnapshot> getProfile(String userId) {
     return databaseReference.collection("users").doc(userId).get();
   }

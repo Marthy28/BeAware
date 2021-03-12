@@ -6,7 +6,7 @@ DBProvider _provider;
 BaseAuth _auth;
 User _firebaseUser;
 
-DBProvider get provider {
+DBProvider get  provider {
   if (_provider == null) {
     _provider = new DataBase();
     _provider.main();
