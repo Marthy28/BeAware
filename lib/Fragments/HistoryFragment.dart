@@ -36,7 +36,7 @@ class _HistoryFragment extends State<HistoryFragment> {
     return Container(
         child: StreamBuilder(
             stream: provider.getHistory(),
-            builder: (BuildContext, AsyncSnapshot<QuerySnapshot> snapshot) {
+            builder: (BuildContext, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
                     shrinkWrap: true,
