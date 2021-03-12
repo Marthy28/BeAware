@@ -14,7 +14,7 @@ StorageProvider _storageProvider;
 
 BuildContext _buildContext;
 
-DBProvider get provider {
+DBProvider get  provider {
   if (_provider == null) {
     _provider = new DataBase();
     _provider.main();
