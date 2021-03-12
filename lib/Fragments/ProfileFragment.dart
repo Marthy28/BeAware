@@ -1,11 +1,26 @@
 import 'dart:ui';
 
+import 'package:be_aware/Util/global.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfileFragment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    void _openFileExplorer() async {
+      FilePickerResult result = await FilePicker.platform.pickFiles();
+
+      if (result != null) {
+        // File file = File(result.files.single.path);
+        print(result.files.single.path);
+        storageProvider.uploadFile(
+            "xshiCmkPvzXIfBCHiju3", result.files.single.path);
+      } else {
+        // User canceled the picker
+      }
+    }
+
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 20),
@@ -31,6 +46,10 @@ class ProfileFragment extends StatelessWidget {
                   color: Colors.blueAccent,
                   child: Text("Edit Profile"),
                   onPressed: () {}),
+              RaisedButton(
+                  color: Colors.blueAccent,
+                  child: Text("Change music"),
+                  onPressed: () => _openFileExplorer()),
             ]))
           ],
         ),
