@@ -2,15 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class DBProvider {
   main();
-  Future<List<DocumentSnapshot>> getHistory();
+  Stream<DocumentSnapshot> getHistory();
 }
 
 class DataBase implements DBProvider {
   FirebaseFirestore databaseReference;
 
-  Future<List<DocumentSnapshot>> getHistory() async {
-    QuerySnapshot snap = await databaseReference.collection('history').get();
-    return snap.docs;
+  Stream<DocumentSnapshot> getHistory() {
+    return databaseReference
+        .collection("alarms")
+        .doc("XkG3PST8SI5fyVcve0Zq")
+        .snapshots();
   }
 
   main() async {

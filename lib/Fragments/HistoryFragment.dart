@@ -21,19 +21,19 @@ class _HistoryFragment extends State<HistoryFragment> {
       ),
     );
   }
-
-  @override
   Widget _listPersonne(BuildContext context) {
     return Container(
-        child: FutureBuilder(
-            future: provider.getHistory(),
+        child: StreamBuilder(
+            stream: provider.getHistory(),
             builder: (BuildContext, snapshot) {
-              if (snapshot.hasData && snapshot.data.length > 0) {
+              if (snapshot.hasData) {
                 return ListView.builder(
                     itemCount: snapshot.data.docs.length,
                     itemBuilder: (context, index) {
                       return itemHistory(context, snapshot.data.docs[index]);
                     });
+              } else {
+                return Container();
               }
             }));
   }
