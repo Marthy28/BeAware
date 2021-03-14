@@ -339,6 +339,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void validateAndSubmit() async {
     //Future<FirebaseUser> firebaseUser;
+
     setState(() {
       _errorMessage = "";
       _isLoading = true;
@@ -353,7 +354,7 @@ class _LoginScreenState extends State<LoginScreen> {
               setState(() {
                 if (user != null) {
                   userId = user?.displayName;
-                  print('Signed in: ${user?.displayName}');
+                  print('Signed in: $userId');
                 }
               });
             });

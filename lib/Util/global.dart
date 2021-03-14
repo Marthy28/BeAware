@@ -13,7 +13,6 @@ VoidCallback _logoutCallback;
 
 BuildContext _buildContext;
 StorageProvider _storageProvider;
-
 DBProvider get provider {
   if (_provider == null) {
     _provider = new DataBase();
