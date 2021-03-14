@@ -1,9 +1,6 @@
-import 'package:be_aware/Util/MyNavigator.dart';
 import 'package:be_aware/Util/global.dart';
-import 'package:be_aware/Model/UserModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback loginCallback;
@@ -323,7 +320,7 @@ class _LoginScreenState extends State<LoginScreen> {
               setState(() {
                 if (user != null) {
                   userId = user?.displayName;
-                  print('Signed in: $userId');
+                  print('Signed in: ${user?.displayName}');
                 }
               });
             });
@@ -336,7 +333,8 @@ class _LoginScreenState extends State<LoginScreen> {
             });
           }
         } else {
-          await auth.signUp(_email, _password, "");
+          userId =
+              await auth.fullSignUp(_email, _password, _firstName, _lastName);
           //widget.auth.sendEmailVerification();
           //_showVerifyEmailSentDialog();
           print('Signed up user: $userId');

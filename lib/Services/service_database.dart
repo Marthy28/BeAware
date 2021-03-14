@@ -30,7 +30,7 @@ class DataBase implements DBProvider {
     DateTime dateTime = DateTime.now(); //Pour premiere connexion
     String firstName = user.displayName;
     String lastName = "";
-    if (user.displayName.contains(" ")) {
+    if (user != null && user.displayName != null && user.displayName.contains(" ")) {
       var fullname = user.displayName.split(" ");
       firstName = fullname[0];
       lastName = fullname[1];
