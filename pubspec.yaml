@@ -24,6 +24,8 @@ dependencies:
   lite_rolling_switch: ^0.1.1
   motion_tab_bar: ^0.1.5
   sliding_card: ^0.1.2
+  provider: ^4.3.2+2
+  path_provider: ^1.6.21
   # firebase_core_web: ^1.0.0
 
   # Check that you have this dependency (added in the previous step)

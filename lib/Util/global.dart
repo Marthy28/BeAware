@@ -1,10 +1,16 @@
+import 'dart:ui';
+
 import 'package:be_aware/Services/service_authentification.dart';
 import 'package:be_aware/Services/service_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 DBProvider _provider;
 BaseAuth _auth;
 User _firebaseUser;
+VoidCallback _logoutCallback;
+
+BuildContext _buildContext;
 
 DBProvider get provider {
   if (_provider == null) {
@@ -31,4 +37,20 @@ User get firebaseUser {
 
 set firebaseUser(User user) {
   _firebaseUser = user;
+}
+
+VoidCallback get logoutCallback {
+  return _logoutCallback;
+}
+
+set logoutCallback(VoidCallback callback) {
+  _logoutCallback = callback;
+}
+
+BuildContext get buildContext {
+  return _buildContext;
+}
+
+set buildContext(BuildContext context) {
+  _buildContext = context;
 }
