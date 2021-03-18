@@ -1,5 +1,6 @@
 import 'package:be_aware/Pages/AppairagePage.dart';
 import 'package:be_aware/Pages/MainPage.dart';
+import 'package:be_aware/Util/global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:be_aware/Pages/root_page.dart';
@@ -7,7 +8,7 @@ import 'package:be_aware/Pages/root_page.dart';
 class MyNavigator {
   static Future<void> goToHome(BuildContext context) async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => MainPage()),
       );
@@ -15,19 +16,18 @@ class MyNavigator {
   }
 
   static Future<void> goToAppairage(BuildContext context) async {
-    // await Future.delayed(Duration(milliseconds: 300));
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => AppairagePage()),
       );
     });
   }
 
-  static Future<void> goToRoot(BuildContext context) async {
+  static Future<void> goToRoot() async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Navigator.pushReplacement(
-        context,
+      Navigator.push(
+        buildContext,
         MaterialPageRoute(builder: (context) => RootPage()),
       );
     });
