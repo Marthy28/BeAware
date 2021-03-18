@@ -293,7 +293,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget showErrorMessage() {
-    print("Error Message : $_errorMessage");
     if (_errorMessage != null && _errorMessage.length > 0) {
       return new Text(
         _errorMessage,
@@ -328,8 +327,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool validateAndSave() {
     final form = _formKey.currentState;
-    print(_formKey);
-    print(_formKey.currentState);
     if (form.validate()) {
       form.save();
       return true;
@@ -362,40 +359,38 @@ class _LoginScreenState extends State<LoginScreen> {
             print('Error: $e');
             setState(() {
               _isLoading = false;
-              _errorMessage = e.message;
+              _errorMessage = e?.message;
               _formKey.currentState.reset();
             });
           }
         } else {
           var res =
               await auth.fullSignUp(_email, _password, _firstName, _lastName);
-          userId = res[0];
-          //widget.auth.sendEmailVerification();
-          //_showVerifyEmailSentDialog();
-          print('Signed up user: $userId');
-          if (userId != null && userId.length > 0) {
-            setState(() {
-              _isLoginForm = true;
-            });
-          } else {
+          print(res[0]);
+          if (res[0] == null || res[0].length <= 0) {
             setState(() {
               _isLoading = false;
-              _errorMessage = res[1].message;
+              _errorMessage = res[1]?.message;
             });
+          } else {
+            await auth
+                .signIn(_email, _password)
+                .then((user) => {userId = user.uid});
           }
         }
         setState(() {
           _isLoading = false;
         });
 
-        if (userId != null && userId.length > 0 && _isLoginForm) {
+        if (userId != null && userId.length > 0) {
           widget.loginCallback();
         }
       } catch (e) {
         print('Error: $e');
         setState(() {
           _isLoading = false;
-          _errorMessage = e is FirebaseAuthException ? e.message : e.toString();
+          _errorMessage =
+              e is FirebaseAuthException ? e?.message : e.toString();
           _formKey.currentState.reset();
         });
       }

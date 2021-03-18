@@ -30,9 +30,6 @@ class Auth implements BaseAuth {
     return _firebaseAuth.signOut();
   }
 
-  ///
-  /// FullSignUpPicture est utilisée pour l'inscription sans image
-  ///
   @override
   Future<List> fullSignUp(
       String email, String password, String firstName, String lastName) async {
@@ -44,7 +41,6 @@ class Auth implements BaseAuth {
       fullName = firstName + " " + lastName;
       result.user.updateProfile(displayName: fullName, photoURL: null);
       User user = result.user;
-      print('User : $user');
       res[0] = user.uid;
       return res;
     } catch (e) {

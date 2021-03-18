@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 abstract class DBProvider {
   main();
   Future<bool> setLastConnexion(User user);
-  Future<bool> setProfilInfo(User user, {bool firstConnect: false});
+  Future<bool> setProfilInfo(User user);
   Future<DocumentSnapshot> getProfilInfo(String profile);
   Future<DocumentSnapshot> getProfile(String userId);
   Stream<DocumentSnapshot> alarm();
@@ -29,7 +29,7 @@ class DataBase implements DBProvider {
     return Future<bool>.value(true);
   }
 
-  Future<bool> setProfilInfo(User user, {bool firstConnect: false}) {
+  Future<bool> setProfilInfo(User user) {
     DateTime dateTime = DateTime.now(); //Pour premiere connexion
     String firstName = user.displayName;
     String lastName = "";
@@ -40,27 +40,14 @@ class DataBase implements DBProvider {
       firstName = fullname[0];
       lastName = fullname[1];
     }
-    if (firstConnect) {
-      databaseReference.collection('users').doc(user.uid).set({
-        'firstName': user.isAnonymous ? "invite" : firstName,
-        'lastName': user.isAnonymous ? "" : lastName,
-        'userPicture': user.isAnonymous ? "" : user.photoURL,
-        'coverPicture': "",
-        'city': "",
-        'country': "",
-        'anonymous': user.isAnonymous,
-        'first_connexion': dateTime
-      }, SetOptions(merge: true)).then((_) {
-        return Future<bool>.value(true);
-      });
-    } else {
-      databaseReference.collection('users').doc(user.uid).set({
-        'firstName': user.isAnonymous ? "invite" : firstName,
-        'lastName': user.isAnonymous ? "" : lastName,
-      }, SetOptions(merge: true)).then((_) {
-        return Future<bool>.value(true);
-      });
-    }
+
+    databaseReference.collection('users').doc(user.uid).set({
+      'firstName': user.isAnonymous ? "invite" : firstName,
+      'lastName': user.isAnonymous ? "" : lastName,
+    }, SetOptions(merge: true)).then((_) {
+      return Future<bool>.value(true);
+    });
+
     return Future<bool>.value(true);
   }
 
