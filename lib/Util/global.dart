@@ -10,9 +10,10 @@ DBProvider _provider;
 BaseAuth _auth;
 User _firebaseUser;
 VoidCallback _logoutCallback;
+StorageProvider _storageProvider;
 
 BuildContext _buildContext;
-StorageProvider _storageProvider;
+
 DBProvider get provider {
   if (_provider == null) {
     _provider = new DataBase();

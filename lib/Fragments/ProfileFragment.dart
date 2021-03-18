@@ -1,7 +1,5 @@
 import 'package:be_aware/Util/MyNavigator.dart';
-import 'package:be_aware/Util/global.dart';
 import 'dart:ui';
-
 import 'package:be_aware/Util/global.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
