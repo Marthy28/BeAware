@@ -1,4 +1,5 @@
 import 'package:be_aware/Util/global.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,9 +19,11 @@ class _LoginScreenState extends State<LoginScreen> {
   String _email;
   String _password;
   bool _isLoginForm = true;
+  bool _isLoading = false;
 
   String _lastName;
   String _firstName;
+  String _errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
               style: Theme.of(_buildContext).textTheme.headline5,
             ),
             _showForm(),
+            _showCircularProgress()
           ],
         ),
       ),
@@ -59,7 +63,8 @@ class _LoginScreenState extends State<LoginScreen> {
         showEmailInput(),
         //showPhoneNumberInput(),
         showPrimaryButton(),
-        showTextAndButton()
+        showTextAndButton(),
+        showErrorMessage()
       ],
     );
   }
@@ -71,7 +76,8 @@ class _LoginScreenState extends State<LoginScreen> {
           showEmailInput(),
           showPasswordInput(),
           showPrimaryButton(),
-          showSecondaryButton()
+          showSecondaryButton(),
+          showErrorMessage()
         ],
       ),
     );
@@ -286,6 +292,33 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: toggleFormMode);
   }
 
+  Widget showErrorMessage() {
+    print("Error Message : $_errorMessage");
+    if (_errorMessage != null && _errorMessage.length > 0) {
+      return new Text(
+        _errorMessage,
+        style: Theme.of(_buildContext)
+            .textTheme
+            .bodyText1
+            .copyWith(fontSize: 20.0, color: Colors.red, height: 2.0),
+      );
+    } else {
+      return new Container(
+        height: 0.0,
+      );
+    }
+  }
+
+  Widget _showCircularProgress() {
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+    return Container(
+      height: 0.0,
+      width: 0.0,
+    );
+  }
+
   String validatePassword(String value) {
     if (!(value.length > 5) && value.isNotEmpty) {
       return "Le mot de passe doit contenir au moins 6 caractères";
@@ -306,10 +339,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void validateAndSubmit() async {
     //Future<FirebaseUser> firebaseUser;
-    // setState(() {
-    //   _errorMessage = "";
-    //   _isLoading = true;
-    // });
+    setState(() {
+      _errorMessage = "";
+      _isLoading = true;
+    });
     String userId = "";
 
     if (validateAndSave()) {
@@ -327,24 +360,32 @@ class _LoginScreenState extends State<LoginScreen> {
           } catch (e) {
             print('Error: $e');
             setState(() {
-              // _isLoading = false;
-              // _errorMessage = e.message;
+              _isLoading = false;
+              _errorMessage = e.message;
               _formKey.currentState.reset();
             });
           }
         } else {
-          userId =
+          var res =
               await auth.fullSignUp(_email, _password, _firstName, _lastName);
+          userId = res[0];
           //widget.auth.sendEmailVerification();
           //_showVerifyEmailSentDialog();
           print('Signed up user: $userId');
-          setState(() {
-            _isLoginForm = true;
-          });
+          if (userId != null && userId.length > 0) {
+            setState(() {
+              _isLoginForm = true;
+            });
+          } else {
+            setState(() {
+              _isLoading = false;
+              _errorMessage = res[1].message;
+            });
+          }
         }
-        // setState(() {
-        //   _isLoading = false;
-        // });
+        setState(() {
+          _isLoading = false;
+        });
 
         if (userId != null && userId.length > 0 && _isLoginForm) {
           widget.loginCallback();
@@ -352,8 +393,8 @@ class _LoginScreenState extends State<LoginScreen> {
       } catch (e) {
         print('Error: $e');
         setState(() {
-          // _isLoading = false;
-          // _errorMessage = e.message;
+          _isLoading = false;
+          _errorMessage = e is FirebaseAuthException ? e.message : e.toString();
           _formKey.currentState.reset();
         });
       }

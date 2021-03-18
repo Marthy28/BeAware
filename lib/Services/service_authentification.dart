@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class BaseAuth {
   Future<User> signIn(String email, String password);
-  Future<String> fullSignUp(
+  Future<List> fullSignUp(
       String email, String password, String firstName, String lastName);
   Future<User> getCurrentUser();
   Future<void> signOut();
@@ -34,8 +34,9 @@ class Auth implements BaseAuth {
   /// FullSignUpPicture est utilisée pour l'inscription sans image
   ///
   @override
-  Future<String> fullSignUp(
+  Future<List> fullSignUp(
       String email, String password, String firstName, String lastName) async {
+    var res = new List(2);
     try {
       UserCredential result = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -44,10 +45,12 @@ class Auth implements BaseAuth {
       result.user.updateProfile(displayName: fullName, photoURL: null);
       User user = result.user;
       print('User : $user');
-      return user.uid;
+      res[0] = user.uid;
+      return res;
     } catch (e) {
       print('Error: $e');
-      return "";
+      res[1] = e;
+      return res;
     }
   }
 }
