@@ -1,5 +1,5 @@
-
 import 'package:be_aware/Pages/LoginScreen.dart';
+import 'package:be_aware/Pages/root_page.dart';
 import 'package:be_aware/Pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,7 +10,13 @@ import 'package:provider/provider.dart';
 import 'Model/UserModel.dart';
 import 'Pages/MainPage.dart';
 
-Future<void> main() async {
+var routes = <String, WidgetBuilder>{
+  "/root": (BuildContext context) => RootPage(),
+  "login": (BuildContext context) => LoginScreen(),
+};
+
+void main() async {
+  print("main");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(
@@ -45,6 +51,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: SplashScreen(),
+      routes: routes,
     );
   }
 }

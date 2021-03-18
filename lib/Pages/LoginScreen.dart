@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback loginCallback;
+  final VoidCallback subscribeCallback;
 
-  LoginScreen({this.loginCallback});
+  LoginScreen({this.loginCallback, this.subscribeCallback});
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -352,6 +353,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 if (user != null) {
                   userId = user?.displayName;
                   print('Signed in: $userId');
+                  if (userId != null && userId.length > 0) {
+                    widget.loginCallback();
+                  }
                 }
               });
             });
@@ -373,18 +377,18 @@ class _LoginScreenState extends State<LoginScreen> {
               _errorMessage = res[1]?.message;
             });
           } else {
-            await auth
-                .signIn(_email, _password)
-                .then((user) => {userId = user.uid});
+            await auth.signIn(_email, _password).then(
+                  (user) => {
+                    userId = user.uid,
+                    if (userId != null && userId.length > 0)
+                      {widget.subscribeCallback()}
+                  },
+                );
           }
         }
         setState(() {
           _isLoading = false;
         });
-
-        if (userId != null && userId.length > 0) {
-          widget.loginCallback();
-        }
       } catch (e) {
         print('Error: $e');
         setState(() {

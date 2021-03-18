@@ -22,6 +22,6 @@ class _SplashScreenState extends State<SplashScreen> {
     //widget.dbProvider.main();
     super.initState();
     buildContext = context;
-    Timer(Duration(milliseconds: 300), () => MyNavigator.goToRoot());
+    Timer(Duration(milliseconds: 300), () => MyNavigator.goToRoot(context));
   }
 }

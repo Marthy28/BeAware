@@ -74,25 +74,28 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
-        bottomNavigationBar: MotionTabBar(
-          labels: labels,
-          initialSelectedTab: labels[0],
-          tabIconColor: Colors.lightBlue,
-          tabSelectedColor: Colors.red,
-          onTabItemSelected: (int value) {
-            setState(() {
-              _tabController.index = value;
-            });
-          },
-          icons: [Icons.hourglass_bottom, Icons.home, Icons.account_circle],
-          textStyle: TextStyle(color: Colors.transparent),
-        ),
-        body: MotionTabBarView(
-          // callbackOnChange: onChange,
-          controller: _tabController,
-          children: mainFragments,
-        ),
-      ),
+          bottomNavigationBar: MotionTabBar(
+            labels: labels,
+            initialSelectedTab: labels[0],
+            tabIconColor: Colors.lightBlue,
+            tabSelectedColor: Colors.red,
+            onTabItemSelected: (int value) {
+              setState(() {
+                _tabController.index = value;
+              });
+            },
+            icons: [Icons.hourglass_bottom, Icons.home, Icons.account_circle],
+            textStyle: TextStyle(color: Colors.transparent),
+          ),
+          body: Stack(
+            children: [
+              MotionTabBarView(
+                // callbackOnChange: onChange,
+                controller: _tabController,
+                children: mainFragments,
+              ),
+            ],
+          )),
       onWillPop: () async {
         if (Navigator.of(navStack[_tabController.index]).canPop()) {
           Navigator.of(navStack[_tabController.index]).pop();

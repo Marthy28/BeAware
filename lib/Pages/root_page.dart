@@ -42,11 +42,19 @@ class _RoutePageState extends State<RootPage> {
     globalKey.auth.getCurrentUser().then((user) {
       globalKey.firebaseUser = user;
       _userId = user.uid.toString();
-
-      print(_userId);
       authStatus = AuthStatus.LOGGED_IN;
       Provider.of<UserModel>(context, listen: false).signIn(user);
       MyNavigator.goToHome(context);
+    });
+  }
+
+  void subscribeCallback() {
+    globalKey.auth.getCurrentUser().then((user) {
+      globalKey.firebaseUser = user;
+      _userId = user.uid.toString();
+      authStatus = AuthStatus.LOGGED_IN;
+      Provider.of<UserModel>(context, listen: false).signIn(user);
+      MyNavigator.goToAppairage(context);
     });
   }
 
@@ -59,7 +67,10 @@ class _RoutePageState extends State<RootPage> {
   }
 
   Widget notDataLogin() {
-    return new LoginScreen(loginCallback: loginCallback);
+    return new LoginScreen(
+      loginCallback: loginCallback,
+      subscribeCallback: subscribeCallback,
+    );
   }
 
   Widget afterHasData(User user) {
@@ -70,7 +81,6 @@ class _RoutePageState extends State<RootPage> {
     if (user != null) {
       _userId = user?.uid;
     }
-
     switch (authStatus) {
       case AuthStatus.NOT_DETERMINED:
         /*return new HomeScreen(
@@ -83,6 +93,7 @@ class _RoutePageState extends State<RootPage> {
       case AuthStatus.NOT_LOGGED_IN:
         return new LoginScreen(
           loginCallback: loginCallback,
+          subscribeCallback: subscribeCallback,
         );
         break;
       /*case AuthStatus.INVITE:

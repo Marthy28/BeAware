@@ -55,7 +55,7 @@ class ProfileFragment extends StatelessWidget {
                     color: Colors.pink,
                     child: Text('Se déconnecter'),
                     onPressed: () {
-                      auth.signOut().then((value) => MyNavigator.goToRoot());
+                      auth.signOut().then((value) => MyNavigator.goToRoot(context));
                     },
                   ),
                 ],
