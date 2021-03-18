@@ -1,5 +1,5 @@
+import 'package:be_aware/Util/MyNavigator.dart';
 import 'dart:ui';
-
 import 'package:be_aware/Util/global.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,34 +27,43 @@ class ProfileFragment extends StatelessWidget {
         child: Column(
           children: [
             Center(
-                child: Column(children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://i.ytimg.com/vi/zPCZWn_iWb0/maxresdefault.jpg"),
-                radius: 80,
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        "https://i.ytimg.com/vi/zPCZWn_iWb0/maxresdefault.jpg"),
+                    radius: 80,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 30, top: 10),
+                    child: Text(
+                      "Tony Bigeard",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  Text("Owner"),
+                  Text("exemple@gmail.com"),
+                  RaisedButton(
+                      color: Colors.blueAccent,
+                      child: Text("Edit Profile"),
+                      onPressed: () {}),
+                  RaisedButton(
+                      color: Colors.blueAccent,
+                      child: Text("Change music"),
+                      onPressed: () => _openFileExplorer()),
+                  FlatButton(
+                    color: Colors.pink,
+                    child: Text('Se déconnecter'),
+                    onPressed: () {
+                      auth.signOut().then((value) => MyNavigator.goToRoot());
+                    },
+                  ),
+                ],
               ),
-              Container(
-                margin: EdgeInsets.only(bottom: 30, top: 10),
-                child: Text(
-                  "Tony Bigeard",
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              Text("Owner"),
-              Text("exemple@gmail.com"),
-              RaisedButton(
-                  color: Colors.blueAccent,
-                  child: Text("Edit Profile"),
-                  onPressed: () {}),
-              RaisedButton(
-                  color: Colors.blueAccent,
-                  child: Text("Change music"),
-                  onPressed: () => _openFileExplorer()),
-            ]))
+            )
           ],
         ),
       ),
     );
-    throw UnimplementedError();
   }
 }

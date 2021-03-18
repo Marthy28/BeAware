@@ -1,16 +1,28 @@
-// import 'package:firebase_core/firebase_core.dart'; // new
-// import 'package:firebase_auth/firebase_auth.dart'; // new
-// import 'src/authentication.dart'; // new
-// import 'src/widgets.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 
+import 'package:be_aware/Pages/LoginScreen.dart';
+import 'package:be_aware/Pages/splash_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'Model/UserModel.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'Model/UserModel.dart';
 import 'Pages/MainPage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserModel>(create: (_) => UserModel()),
+      ],
+      child: Consumer<UserModel>(builder: (_, settings, child) {
+        return MyApp();
+      }),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,20 +30,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        fontFamily: 'Raleway',
+        textTheme: TextTheme(
+          bodyText1: TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0),
+          bodyText2: TextStyle(fontWeight: FontWeight.w500, fontSize: 14.0),
+          button: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+          headline5: TextStyle(
+            fontWeight: FontWeight.w800 /*extrabold*/,
+            fontSize: 38,
+          ),
+        ),
       ),
-      home: MainPage(title: 'Flutter Demo Home Page'),
+      home: SplashScreen(),
     );
   }
 }
