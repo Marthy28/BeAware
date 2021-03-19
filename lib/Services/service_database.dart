@@ -26,7 +26,7 @@ class DataBase implements DBProvider {
   Stream<QuerySnapshot> getHistory() {
     return databaseReference
         .collection("alarms")
-        .doc("XkG3PST8SI5fyVcve0Zq")
+        .doc("xshiCmkPvzXIfBCHiju3")
         .collection("history")
         .snapshots();
   }

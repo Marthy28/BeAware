@@ -3,7 +3,6 @@ import 'package:be_aware/Util/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:be_aware/Util/global.dart';
 
 class HistoryFragment extends StatefulWidget {
   @override
