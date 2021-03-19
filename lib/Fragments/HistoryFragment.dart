@@ -3,6 +3,7 @@ import 'package:be_aware/Util/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 class HistoryFragment extends StatefulWidget {
   @override
@@ -53,11 +54,16 @@ class _HistoryFragment extends State<HistoryFragment> {
 
   Widget itemHistory(BuildContext context, QueryDocumentSnapshot document) {
     DateTime date;
-    if (document.data()["date"].toDate() != null) {
-      date = document.data()["date"].toDate();
-    } else {
+
+    if (document.data()["date"] == null) {
       date = DateTime.now();
+    } else if (document.data()["date"] is String) {
+      date =
+          new DateFormat("yyyy-MM-dd hh:mm:ss").parse(document.data()["date"]);
+    } else {
+      date = document.data()["date"].toDate().toLocal();
     }
+
     return FutureBuilder(
       future: getProfilInfo(document),
       builder: (context, snapshot) {
@@ -87,7 +93,7 @@ class _HistoryFragment extends State<HistoryFragment> {
                                       fontWeight: FontWeight.bold),
                             ),
                             Padding(
-                                padding: EdgeInsets.fromLTRB(150, 5, 5, 30),
+                                padding: EdgeInsets.fromLTRB(0, 5, 5, 30),
                                 child: Text(
                                   "${date.hour}h${date.minute}",
                                   textAlign: TextAlign.left,
