@@ -52,8 +52,7 @@ class _HistoryFragment extends State<HistoryFragment> {
   }
 
   Widget itemHistory(BuildContext context, QueryDocumentSnapshot document) {
-    Timestamp test = document.data()["date"];
-    var date = test.toDate();
+    var date = document.data()["date"].toDate();
     return FutureBuilder(
       future: getProfilInfo(document),
       builder: (context, snapshot) {
