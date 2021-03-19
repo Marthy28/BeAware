@@ -6,6 +6,7 @@ abstract class DBProvider {
   Future<bool> setLastConnexion(User user);
   Future<bool> setProfilInfo(User user);
   Future<void> setAlarmToProfil(String alarmId, String userId);
+  Stream<QuerySnapshot> getHistory();
   Future<DocumentSnapshot> getProfilInfo(String profile);
   Future<DocumentSnapshot> getProfile(String userId);
   Stream<DocumentSnapshot> alarm();
@@ -16,10 +17,11 @@ abstract class DBProvider {
 class DataBase implements DBProvider {
   FirebaseFirestore databaseReference;
 
-  Stream<DocumentSnapshot> getHistory() {
+  Stream<QuerySnapshot> getHistory() {
     return databaseReference
         .collection("alarms")
         .doc("XkG3PST8SI5fyVcve0Zq")
+        .collection("history")
         .snapshots();
   }
 
