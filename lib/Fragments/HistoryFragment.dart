@@ -52,7 +52,12 @@ class _HistoryFragment extends State<HistoryFragment> {
   }
 
   Widget itemHistory(BuildContext context, QueryDocumentSnapshot document) {
-    var date = document.data()["date"].toDate();
+    DateTime date;
+    if (document.data()["date"].toDate() != null) {
+      date = document.data()["date"].toDate();
+    } else {
+      date = DateTime.now();
+    }
     return FutureBuilder(
       future: getProfilInfo(document),
       builder: (context, snapshot) {
@@ -104,6 +109,6 @@ class _HistoryFragment extends State<HistoryFragment> {
 
   getProfilInfo(QueryDocumentSnapshot document) async {
     var user = await provider.getProfile(document.data()["user_id"]);
-    userDetail = Profil.fromProfilData(user.data());
+    if (user != null) userDetail = Profil.fromProfilData(user.data());
   }
 }
