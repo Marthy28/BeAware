@@ -107,7 +107,8 @@ class _RoutePageState extends State<RootPage> {
         if (_userId.length > 0 && _userId != null) {
           print(_userId);
           Provider.of<UserModel>(context, listen: false).signIn(user);
-          MyNavigator.goToHome(context);
+          MyNavigator.goToAppairage(context);
+          //MyNavigator.goToHome(context);
         } else
           return buildWaitingScreen();
         break;

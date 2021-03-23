@@ -16,7 +16,6 @@ var routes = <String, WidgetBuilder>{
 };
 
 void main() async {
-  print("main");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(
