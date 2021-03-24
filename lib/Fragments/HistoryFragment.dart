@@ -54,7 +54,7 @@ class _HistoryFragment extends State<HistoryFragment> {
 
   Widget itemHistory(BuildContext context, QueryDocumentSnapshot document) {
     DateTime date;
-
+    userDetail = null;
     if (document.data()["date"] == null) {
       date = DateTime.now();
     } else if (document.data()["date"] is String) {

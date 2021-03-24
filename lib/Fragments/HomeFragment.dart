@@ -124,7 +124,15 @@ class _HomeFragmentState extends State<HomeFragment> {
                                               child: Padding(
                                                   padding: EdgeInsets.all(10),
                                                   child: Text(
-                                                      "Il y a eu une intrusion dans votre maison à ")))
+                                                      "Il y a eu une intrusion dans votre maison à "))),
+                                          FlatButton(
+                                            onPressed: () {
+                                              snapshot
+                                                  .data.docs[index].reference
+                                                  .update({"type": "validate"});
+                                            },
+                                            child: Text("marquer comme lu"),
+                                          )
                                         ],
                                       )));
                                     } else {
