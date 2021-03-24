@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:be_aware/Util/global.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -155,6 +156,7 @@ class _AppairagePageState extends State<AppairagePage> {
           result = scanData.code;
           _isQRMode = false;
           print('scandata : ${scanData.code}');
+          provider.setAlarmToProfil(scanData.code, firebaseUser.uid);
         });
       }
     });

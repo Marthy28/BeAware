@@ -5,6 +5,7 @@ abstract class DBProvider {
   main();
   Future<bool> setLastConnexion(User user);
   Future<bool> setProfilInfo(User user);
+  Future<void> setAlarmToProfil(String alarmId, String userId);
   Future<DocumentSnapshot> getProfilInfo(String profile);
   Future<DocumentSnapshot> getProfile(String userId);
   Stream<DocumentSnapshot> alarm();
@@ -49,6 +50,19 @@ class DataBase implements DBProvider {
     });
 
     return Future<bool>.value(true);
+  }
+
+  Future<void> setAlarmToProfil(String alarmId, String userId) {
+    return databaseReference
+        .collection('alarms')
+        .where('code_activation', isEqualTo: alarmId)
+        .get()
+        .then((value) => databaseReference
+                .collection('alarms')
+                .doc(value.docs.first.id)
+                .update({
+              "users": FieldValue.arrayUnion([userId])
+            }));
   }
 
   Future<DocumentSnapshot> getProfilInfo(String profile) {
