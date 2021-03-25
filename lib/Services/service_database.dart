@@ -17,6 +17,14 @@ abstract class DBProvider {
 class DataBase implements DBProvider {
   FirebaseFirestore databaseReference;
 
+  Stream<QuerySnapshot> getHistory() {
+    return databaseReference
+        .collection("alarms")
+        .doc("xshiCmkPvzXIfBCHiju3")
+        .collection("history")
+        .snapshots();
+  }
+
   main() async {
     print("Opening connection ...");
     databaseReference = FirebaseFirestore.instance;
