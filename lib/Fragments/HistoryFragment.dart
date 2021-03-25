@@ -36,7 +36,7 @@ class _HistoryFragment extends State<HistoryFragment> {
   Widget _listPersonne(BuildContext context) {
     return Container(
         child: StreamBuilder(
-            stream: provider.getHistory(),
+            stream: provider.getHistory(20),
             builder: (BuildContext, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
@@ -61,13 +61,15 @@ class _HistoryFragment extends State<HistoryFragment> {
       date =
           new DateFormat("yyyy-MM-dd hh:mm:ss").parse(document.data()["date"]);
     } else {
-      date = document.data()["date"].toDate().toLocal();
+      date = DateFormat("yyyy-MM-dd hh:mm:ss").parse(document
+          .data()["date"]
+          .toString()); //document.data()["date"].toDate().toLocal();
     }
 
     return FutureBuilder(
       future: getProfilInfo(document),
       builder: (context, snapshot) {
-        if (userDetail != null) {
+        if (snapshot.hasData) {
           return Padding(
               padding: EdgeInsets.all(10),
               child: Card(
@@ -79,23 +81,32 @@ class _HistoryFragment extends State<HistoryFragment> {
                             Padding(
                                 padding: EdgeInsets.all(10),
                                 child: CircleAvatar(
-                                  backgroundColor: Colors.black,
+                                  backgroundColor:
+                                      document.data()['type'] == 'alert'
+                                          ? Colors.red
+                                          : Colors.green,
                                 )),
                             Text(
-                              "${userDetail.firstName} ${userDetail.lastName}",
+                              document.data()['type'] == 'alert'
+                                  ? "Intrusion"
+                                  : "${snapshot.data.firstName} ${snapshot.data.lastName}",
                               textAlign: TextAlign.left,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1
                                   .copyWith(
                                       fontSize: 28.0,
-                                      color: Colors.black,
+                                      color: document.data()['type'] == 'alert'
+                                          ? Colors.red
+                                          : Colors.black,
                                       fontWeight: FontWeight.bold),
                             ),
                             Padding(
                                 padding: EdgeInsets.fromLTRB(0, 5, 5, 30),
                                 child: Text(
-                                  "${date.hour}h${date.minute}",
+                                  date.minute < 10
+                                      ? "${date.hour}h0${date.minute}"
+                                      : "${date.hour}h${date.minute}",
                                   textAlign: TextAlign.left,
                                   style: Theme.of(context)
                                       .textTheme
@@ -113,8 +124,9 @@ class _HistoryFragment extends State<HistoryFragment> {
     );
   }
 
-  getProfilInfo(QueryDocumentSnapshot document) async {
+  Future<Profil> getProfilInfo(QueryDocumentSnapshot document) async {
     var user = await provider.getProfile(document.data()["user_id"]);
-    if (user != null) userDetail = Profil.fromProfilData(user.data());
+    if (user != null) return userDetail = Profil.fromProfilData(user.data());
+    return null;
   }
 }

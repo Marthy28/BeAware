@@ -51,8 +51,7 @@ class _HomeFragmentState extends State<HomeFragment> {
             ),
           ),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
               children: [
                 Center(
                   child: Text(
@@ -88,9 +87,66 @@ class _HomeFragmentState extends State<HomeFragment> {
                     stream: provider.alarm(),
                   ),
                 ),
+                /*Container(
+                    child: StreamBuilder(
+                        stream: provider.getLastHistory(),
+                        builder:
+                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasData) {
+                            DateTime date;
+                            return ListView.builder(
+                                itemBuilder: (context, index) {
+                              if (snapshot.data.docs[index]["date"] == null) {
+                                date = DateTime.now();
+                              } else if (snapshot.data.docs[index]["date"]
+                                  is String) {
+                                date = new DateFormat.d("yyyy-MM-dd hh:mm:ss")
+                                    .parse(snapshot.data.docs[index]["date"]);
+                              } else {
+                                date = snapshot.data.docs[index]["date"]
+                                    .toDate()
+                                    .toLocal();
+                              }
+                              return snapshot.data.docs[index]['type'] ==
+                                      'alert'
+                                  ? Card(
+                                      child: Column(
+                                      children: [
+                                        Container(
+                                            width: double.infinity,
+                                            color: Colors.red,
+                                            child: Expanded(
+                                                child: Padding(
+                                                    padding: EdgeInsets.all(15),
+                                                    child: Text(
+                                                      "You have a intrusion",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 30,
+                                                      ),
+                                                    )))),
+                                        Container(
+                                            child: Padding(
+                                                padding: EdgeInsets.all(10),
+                                                child: Text(
+                                                    "Il y a eu une intrusion dans votre maison le ${date.day}/${date.month} à ${date.hour}h${date.minute}"))),
+                                        TextButton(
+                                          onPressed: () {
+                                            //.update({"type": "validate"});
+                                          },
+                                          child: Text("marquer comme lu"),
+                                        )
+                                      ],
+                                    ))
+                                  : Container();
+                            });
+                          } else {
+                            return Container();
+                          }
+                        }))*/
                 Container(
                     child: StreamBuilder(
-                        stream: provider.getHistory(),
+                        stream: provider.getHistory(1),
                         builder: (BuildContext,
                             AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (snapshot.hasData) {
@@ -146,11 +202,6 @@ class _HomeFragmentState extends State<HomeFragment> {
                             return Container();
                           }
                         })),
-                Text(
-                  "History",
-                  style: TextStyle(fontSize: 20),
-                ),
-                for (var w in dataWidget) w,
                 /*Expanded(
                     child: Padding(
                         padding: EdgeInsets.only(bottom: 50),

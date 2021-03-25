@@ -28,10 +28,10 @@ dependencies:
   path_provider: ^1.6.21
   # firebase_core_web: ^1.0.0
   file_picker: ^2.1.7
+  intl: ^0.16.0
 
   nfc_in_flutter: ^2.0.5
   flutter_nfc_reader: ^0.1.0
-  intl: ^0.17.0
   # Check that you have this dependency (added in the previous step)
   firebase_core: ^0.7.0
 
