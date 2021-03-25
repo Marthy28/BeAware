@@ -3,7 +3,6 @@ import 'package:be_aware/Util/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
 
 class HistoryFragment extends StatefulWidget {
   @override
@@ -54,8 +53,9 @@ class _HistoryFragment extends State<HistoryFragment> {
 
   Widget itemHistory(BuildContext context, QueryDocumentSnapshot document) {
     DateTime date;
-    userDetail = null;
-    if (document.data()["date"] == null) {
+    if (document.data()["date"].toDate() != null) {
+      date = document.data()["date"].toDate();
+    } else {
       date = DateTime.now();
     } else if (document.data()["date"] is String) {
       date =
@@ -65,11 +65,10 @@ class _HistoryFragment extends State<HistoryFragment> {
           .data()["date"]
           .toString()); //document.data()["date"].toDate().toLocal();
     }
-
     return FutureBuilder(
       future: getProfilInfo(document),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (userDetail != null) {
           return Padding(
               padding: EdgeInsets.all(10),
               child: Card(
@@ -81,32 +80,23 @@ class _HistoryFragment extends State<HistoryFragment> {
                             Padding(
                                 padding: EdgeInsets.all(10),
                                 child: CircleAvatar(
-                                  backgroundColor:
-                                      document.data()['type'] == 'alert'
-                                          ? Colors.red
-                                          : Colors.green,
+                                  backgroundColor: Colors.black,
                                 )),
                             Text(
-                              document.data()['type'] == 'alert'
-                                  ? "Intrusion"
-                                  : "${snapshot.data.firstName} ${snapshot.data.lastName}",
+                              "${userDetail.firstName} ${userDetail.lastName}",
                               textAlign: TextAlign.left,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1
                                   .copyWith(
                                       fontSize: 28.0,
-                                      color: document.data()['type'] == 'alert'
-                                          ? Colors.red
-                                          : Colors.black,
+                                      color: Colors.black,
                                       fontWeight: FontWeight.bold),
                             ),
                             Padding(
-                                padding: EdgeInsets.fromLTRB(0, 5, 5, 30),
+                                padding: EdgeInsets.fromLTRB(150, 5, 5, 30),
                                 child: Text(
-                                  date.minute < 10
-                                      ? "${date.hour}h0${date.minute}"
-                                      : "${date.hour}h${date.minute}",
+                                  "${date.hour}h${date.minute}",
                                   textAlign: TextAlign.left,
                                   style: Theme.of(context)
                                       .textTheme
@@ -124,9 +114,8 @@ class _HistoryFragment extends State<HistoryFragment> {
     );
   }
 
-  Future<Profil> getProfilInfo(QueryDocumentSnapshot document) async {
+  getProfilInfo(QueryDocumentSnapshot document) async {
     var user = await provider.getProfile(document.data()["user_id"]);
-    if (user != null) return userDetail = Profil.fromProfilData(user.data());
-    return null;
+    if (user != null) userDetail = Profil.fromProfilData(user.data());
   }
 }
