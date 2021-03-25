@@ -6,9 +6,11 @@ abstract class DBProvider {
   Future<bool> setLastConnexion(User user);
   Future<bool> setProfilInfo(User user);
   Stream<QuerySnapshot> getHistory(int limit);
+  Future<void> setAlarmToProfil(String alarmId, String userId);
   Future<DocumentSnapshot> getProfilInfo(String profile);
   Future<DocumentSnapshot> getProfile(String userId);
-  Stream<DocumentSnapshot> alarm();
+  Stream<DocumentSnapshot> alarm(String alarmId);
+  Stream<QuerySnapshot> usersAlarm(String userId);
   setIsActive(bool isActive);
 }
 
@@ -29,6 +31,10 @@ class DataBase implements DBProvider {
     print("Opening connection ...");
     databaseReference = FirebaseFirestore.instance;
     print("Opened connection!");
+  }
+
+  Future<DocumentSnapshot> getProfile(String userId) {
+    return databaseReference.collection("users").doc(userId).get();
   }
 
   Future<bool> setLastConnexion(User user) {
@@ -62,19 +68,34 @@ class DataBase implements DBProvider {
     return Future<bool>.value(true);
   }
 
+  Future<void> setAlarmToProfil(String alarmId, String userId) async {
+    var alarms = await databaseReference
+        .collection('alarms')
+        .where('code_activation', isEqualTo: alarmId)
+        .get();
+
+    if (alarms == null || alarms.docs == null || alarms.docs.length == 0)
+      return;
+
+    var users = alarms.docs.first.data()["users"] as List<dynamic>;
+
+    if (!users.contains(userId)) {
+      print("Alarm add");
+      databaseReference.collection('alarms').doc(alarms.docs.first.id).update({
+        "users": FieldValue.arrayUnion([userId])
+      });
+    }
+  }
+
   Future<DocumentSnapshot> getProfilInfo(String profile) {
     return databaseReference.collection("users").doc(profile).get();
   }
 
-  Future<DocumentSnapshot> getProfile(String userId) {
-    return databaseReference.collection("users").doc(userId).get();
-  }
+  Stream<DocumentSnapshot> alarm(String alarmId) {
+    if (alarmId == null) return null;
 
-  Stream<DocumentSnapshot> alarm() {
-    return databaseReference
-        .collection("alarms")
-        .doc("xshiCmkPvzXIfBCHiju3")
-        .snapshots();
+    print(alarmId);
+    return databaseReference.collection("alarms").doc(alarmId).snapshots();
   }
 
   setIsActive(bool isActive) {
@@ -84,5 +105,10 @@ class DataBase implements DBProvider {
         .update({"isActive": isActive});
   }
 
-  activeAlarm() {}
+  Stream<QuerySnapshot> usersAlarm(String userId) {
+    return databaseReference
+        .collection("alarms")
+        .where("users", arrayContains: userId)
+        .snapshots();
+  }
 }

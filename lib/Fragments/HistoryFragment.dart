@@ -3,6 +3,7 @@ import 'package:be_aware/Util/global.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:be_aware/Util/global.dart';
 import 'package:intl/intl.dart';
 
 class HistoryFragment extends StatefulWidget {
@@ -12,7 +13,6 @@ class HistoryFragment extends StatefulWidget {
 
 class _HistoryFragment extends State<HistoryFragment> {
   Profil userDetail;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +92,7 @@ class _HistoryFragment extends State<HistoryFragment> {
                                   .textTheme
                                   .bodyText1
                                   .copyWith(
-                                      fontSize: 28.0,
+                                      fontSize: 15.0,
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold),
                             ),
