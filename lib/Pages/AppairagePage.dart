@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:be_aware/Util/MyNavigator.dart';
 import 'package:be_aware/Util/global.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -71,7 +72,8 @@ class _AppairagePageState extends State<AppairagePage> {
           children: [
             StreamBuilder(
                 stream: provider.usersAlarm(firebaseUser.uid),
-                builder: (BuildContext context, snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData &&
                       snapshot.data.docs.length != null &&
                       snapshot.data.docs.length > 0) {

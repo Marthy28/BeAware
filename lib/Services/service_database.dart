@@ -9,7 +9,7 @@ abstract class DBProvider {
   Stream<QuerySnapshot> getHistory();
   Future<DocumentSnapshot> getProfilInfo(String profile);
   Future<DocumentSnapshot> getProfile(String userId);
-  Stream<DocumentSnapshot> alarm();
+  Stream<DocumentSnapshot> alarm(String alarmId);
   Stream<QuerySnapshot> usersAlarm(String userId);
   setIsActive(bool isActive);
 }
@@ -29,14 +29,6 @@ class DataBase implements DBProvider {
     print("Opening connection ...");
     databaseReference = FirebaseFirestore.instance;
     print("Opened connection!");
-  }
-
-  Stream<QuerySnapshot> getHistory() {
-    return databaseReference
-        .collection("alarms")
-        .doc("xshiCmkPvzXIfBCHiju3")
-        .collection("history")
-        .snapshots();
   }
 
   Future<DocumentSnapshot> getProfile(String userId) {
@@ -97,11 +89,11 @@ class DataBase implements DBProvider {
     return databaseReference.collection("users").doc(profile).get();
   }
 
-  Stream<DocumentSnapshot> alarm() {
-    return databaseReference
-        .collection("alarms")
-        .doc("xshiCmkPvzXIfBCHiju3")
-        .snapshots();
+  Stream<DocumentSnapshot> alarm(String alarmId) {
+    if (alarmId == null) return null;
+
+    print(alarmId);
+    return databaseReference.collection("alarms").doc(alarmId).snapshots();
   }
 
   setIsActive(bool isActive) {
