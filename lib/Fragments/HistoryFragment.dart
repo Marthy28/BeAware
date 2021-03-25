@@ -36,7 +36,7 @@ class _HistoryFragment extends State<HistoryFragment> {
   Widget _listPersonne(BuildContext context) {
     return Container(
         child: StreamBuilder(
-            stream: provider.getHistory(),
+            stream: provider.getHistory(20),
             builder: (BuildContext, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
@@ -66,30 +66,27 @@ class _HistoryFragment extends State<HistoryFragment> {
     return FutureBuilder(
       future: getProfilInfo(document),
       builder: (context, snapshot) {
-        if (userDetail != null) {
+        if (snapshot.hasData) {
           return Padding(
               padding: EdgeInsets.all(10),
               child: Card(
                   child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Row(children: [
-                        Padding(
-                            padding: EdgeInsets.all(10),
-                            child: CircleAvatar(
-                              backgroundColor: Colors.black,
-                            )),
-                        Text(
-                          "${userDetail.firstName} ${userDetail.lastName}",
-                          textAlign: TextAlign.left,
-                          style: Theme.of(context).textTheme.bodyText1.copyWith(
-                              fontSize: 28.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.fromLTRB(150, 5, 5, 30),
-                            child: Text(
-                              "${date.hour}h${date.minute}",
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.all(10),
+                                child: CircleAvatar(
+                                  backgroundColor:
+                                      document.data()['type'] == 'alert'
+                                          ? Colors.red
+                                          : Colors.green,
+                                )),
+                            Text(
+                              document.data()['type'] == 'alert'
+                                  ? "Intrusion"
+                                  : "${snapshot.data.firstName} ${snapshot.data.lastName}",
                               textAlign: TextAlign.left,
                               style: Theme.of(context)
                                   .textTheme
@@ -98,8 +95,23 @@ class _HistoryFragment extends State<HistoryFragment> {
                                       fontSize: 15.0,
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold),
-                            )),
-                      ]))));
+                            ),
+                            Padding(
+                                padding: EdgeInsets.fromLTRB(40, 5, 5, 30),
+                                child: Text(
+                                  date.minute < 10
+                                      ? "${date.hour}h0${date.minute}"
+                                      : "${date.hour}h${date.minute}",
+                                  textAlign: TextAlign.left,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .copyWith(
+                                          fontSize: 15.0,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                )),
+                          ]))));
         } else {
           return Container();
         }
@@ -107,8 +119,11 @@ class _HistoryFragment extends State<HistoryFragment> {
     );
   }
 
-  getProfilInfo(QueryDocumentSnapshot document) async {
+  Future<Profil> getProfilInfo(QueryDocumentSnapshot document) async {
     var user = await provider.getProfile(document.data()["user_id"]);
-    if (user != null) userDetail = Profil.fromProfilData(user.data());
+    if (user != null)
+      return userDetail = Profil.fromProfilData(user.data());
+    else
+      return null;
   }
 }

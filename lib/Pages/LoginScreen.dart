@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _buildContext = context;
 
     return new Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           children: [
