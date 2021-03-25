@@ -31,14 +31,6 @@ class DataBase implements DBProvider {
     print("Opened connection!");
   }
 
-  Stream<QuerySnapshot> getHistory() {
-    return databaseReference
-        .collection("alarms")
-        .doc("xshiCmkPvzXIfBCHiju3")
-        .collection("history")
-        .snapshots();
-  }
-
   Future<DocumentSnapshot> getProfile(String userId) {
     return databaseReference.collection("users").doc(userId).get();
   }
