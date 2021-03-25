@@ -11,10 +11,10 @@ BaseAuth _auth;
 User _firebaseUser;
 VoidCallback _logoutCallback;
 StorageProvider _storageProvider;
-
+const String firebaseID = "__name__";
 BuildContext _buildContext;
 
-DBProvider get  provider {
+DBProvider get provider {
   if (_provider == null) {
     _provider = new DataBase();
     _provider.main();

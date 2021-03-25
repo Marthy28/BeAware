@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:be_aware/Util/global.dart';
+import 'package:intl/intl.dart';
 
 class HistoryFragment extends StatefulWidget {
   @override
@@ -53,10 +54,14 @@ class _HistoryFragment extends State<HistoryFragment> {
 
   Widget itemHistory(BuildContext context, QueryDocumentSnapshot document) {
     DateTime date;
-    if (document.data()["date"].toDate() != null) {
-      date = document.data()["date"].toDate();
-    } else {
+    userDetail = null;
+    if (document.data()["date"] == null) {
       date = DateTime.now();
+    } else if (document.data()["date"] is String) {
+      date =
+          new DateFormat("yyyy-MM-dd hh:mm:ss").parse(document.data()["date"]);
+    } else {
+      date = document.data()["date"].toDate().toLocal();
     }
     return FutureBuilder(
       future: getProfilInfo(document),
@@ -67,39 +72,34 @@ class _HistoryFragment extends State<HistoryFragment> {
               child: Card(
                   child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                                padding: EdgeInsets.all(10),
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.black,
-                                )),
-                            Text(
-                              "${userDetail.firstName} ${userDetail.lastName}",
+                      child: Row(children: [
+                        Padding(
+                            padding: EdgeInsets.all(10),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.black,
+                            )),
+                        Text(
+                          "${userDetail.firstName} ${userDetail.lastName}",
+                          textAlign: TextAlign.left,
+                          style: Theme.of(context).textTheme.bodyText1.copyWith(
+                              fontSize: 28.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(150, 5, 5, 30),
+                            child: Text(
+                              "${date.hour}h${date.minute}",
                               textAlign: TextAlign.left,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1
                                   .copyWith(
-                                      fontSize: 28.0,
+                                      fontSize: 15.0,
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold),
-                            ),
-                            Padding(
-                                padding: EdgeInsets.fromLTRB(150, 5, 5, 30),
-                                child: Text(
-                                  "${date.hour}h${date.minute}",
-                                  textAlign: TextAlign.left,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      .copyWith(
-                                          fontSize: 15.0,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                )),
-                          ]))));
+                            )),
+                      ]))));
         } else {
           return Container();
         }
