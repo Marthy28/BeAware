@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:nfc_in_flutter/nfc_in_flutter.dart';
+import 'package:intl/intl.dart';
 
 class Info {
   String name;
@@ -22,22 +22,9 @@ class HomeFragment extends StatefulWidget {
 }
 
 class _HomeFragmentState extends State<HomeFragment> {
-  /*bool _supportsNFC = false;
-  bool _reading = false;*/
-  Stream<NDEFMessage> stream = NFC.readNDEF();
-
   @override
   Widget build(BuildContext context) {
     bool _isActive;
-    List<Info> data = [
-      new Info("Robin Bigeard"),
-      new Info("Robin Bigeard"),
-      new Info("Robin Bigeard")
-    ];
-    List<Widget> dataWidget = new List<Widget>();
-    data.forEach((element) {
-      dataWidget.add(Text(element.name));
-    });
 
     return Scaffold(
       body: Column(
@@ -51,7 +38,8 @@ class _HomeFragmentState extends State<HomeFragment> {
             ),
           ),
           Expanded(
-            child: ListView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
                   child: Text(
@@ -87,63 +75,6 @@ class _HomeFragmentState extends State<HomeFragment> {
                     stream: provider.alarm(),
                   ),
                 ),
-                /*Container(
-                    child: StreamBuilder(
-                        stream: provider.getLastHistory(),
-                        builder:
-                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                          if (snapshot.hasData) {
-                            DateTime date;
-                            return ListView.builder(
-                                itemBuilder: (context, index) {
-                              if (snapshot.data.docs[index]["date"] == null) {
-                                date = DateTime.now();
-                              } else if (snapshot.data.docs[index]["date"]
-                                  is String) {
-                                date = new DateFormat.d("yyyy-MM-dd hh:mm:ss")
-                                    .parse(snapshot.data.docs[index]["date"]);
-                              } else {
-                                date = snapshot.data.docs[index]["date"]
-                                    .toDate()
-                                    .toLocal();
-                              }
-                              return snapshot.data.docs[index]['type'] ==
-                                      'alert'
-                                  ? Card(
-                                      child: Column(
-                                      children: [
-                                        Container(
-                                            width: double.infinity,
-                                            color: Colors.red,
-                                            child: Expanded(
-                                                child: Padding(
-                                                    padding: EdgeInsets.all(15),
-                                                    child: Text(
-                                                      "You have a intrusion",
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 30,
-                                                      ),
-                                                    )))),
-                                        Container(
-                                            child: Padding(
-                                                padding: EdgeInsets.all(10),
-                                                child: Text(
-                                                    "Il y a eu une intrusion dans votre maison le ${date.day}/${date.month} à ${date.hour}h${date.minute}"))),
-                                        TextButton(
-                                          onPressed: () {
-                                            //.update({"type": "validate"});
-                                          },
-                                          child: Text("marquer comme lu"),
-                                        )
-                                      ],
-                                    ))
-                                  : Container();
-                            });
-                          } else {
-                            return Container();
-                          }
-                        }))*/
                 Container(
                     child: StreamBuilder(
                         stream: provider.getHistory(1),
@@ -158,6 +89,22 @@ class _HomeFragmentState extends State<HomeFragment> {
                                   if (snapshot.hasData) {
                                     if (snapshot.data.docs[index]['type'] ==
                                         'alert') {
+                                      DateTime date;
+                                      if (snapshot.data.docs[index]["date"] ==
+                                          null) {
+                                        date = DateTime.now();
+                                      } else if (snapshot.data.docs[index]
+                                          ["date"] is String) {
+                                        date = new DateFormat(
+                                                "yyyy-MM-dd hh:mm:ss")
+                                            .parse(snapshot.data.docs[index]
+                                                ["date"]);
+                                      } else {
+                                        date = snapshot.data.docs[index]["date"]
+                                            .toDate()
+                                            .toLocal();
+                                      }
+
                                       return Container(
                                           child: Card(
                                               child: Column(
@@ -179,9 +126,10 @@ class _HomeFragmentState extends State<HomeFragment> {
                                           Container(
                                               child: Padding(
                                                   padding: EdgeInsets.all(10),
-                                                  child: Text(
-                                                      "Il y a eu une intrusion dans votre maison à "))),
-                                          FlatButton(
+                                                  child: Text(date.minute < 10
+                                                      ? "Il y a eu une intrusion dans votre maison le ${date.day}/${date.month} à ${date.hour}h0${date.minute}"
+                                                      : "Il y a eu une intrusion dans votre maison le ${date.day}/${date.month} à ${date.hour}h${date.minute}"))),
+                                          TextButton(
                                             onPressed: () {
                                               snapshot
                                                   .data.docs[index].reference
@@ -202,35 +150,6 @@ class _HomeFragmentState extends State<HomeFragment> {
                             return Container();
                           }
                         })),
-                /*Expanded(
-                    child: Padding(
-                        padding: EdgeInsets.only(bottom: 50),
-                        child: Align(
-                            alignment: FractionalOffset.bottomCenter,
-                            child: _supportsNFC
-                                ? RaisedButton(
-                                    elevation: 10,
-                                    onPressed: () {},
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.nfc),
-                                        Text("Scan NFC"),
-                                      ],
-                                    ),
-                                  )
-                                : RaisedButton(
-                                    elevation: 10,
-                                    onPressed: () {
-                                      null;
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.nfc),
-                                        Text(
-                                            "Votre téléphone n'est pas compatible NFC"),
-                                      ],
-                                    ),
-                                  ))))*/
               ],
             ),
           ),
@@ -238,15 +157,4 @@ class _HomeFragmentState extends State<HomeFragment> {
       ),
     );
   }
-
-  /*@override
-  void initState() {
-    super.initState();
-    NFC.isNDEFSupported.then((bool isSupported) {
-      setState(() {
-        _supportsNFC = isSupported;
-      });
-    });
-  }*/
-
 }
