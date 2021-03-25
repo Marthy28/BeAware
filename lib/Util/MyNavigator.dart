@@ -19,7 +19,10 @@ class MyNavigator {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AppairagePage()),
+        MaterialPageRoute(
+            builder: (context) => AppairagePage(
+                  isFromProfil: false,
+                )),
       );
     });
   }
@@ -30,6 +33,24 @@ class MyNavigator {
         buildContext,
         MaterialPageRoute(builder: (context) => RootPage()),
       );
+    });
+  }
+
+  static Future<void> goToMyAlarms() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.push(
+        buildContext,
+        MaterialPageRoute(
+            builder: (context) => AppairagePage(
+                  isFromProfil: true,
+                )),
+      );
+    });
+  }
+
+  static Future<void> goBackFromMyAlarms() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.pop(buildContext);
     });
   }
 }

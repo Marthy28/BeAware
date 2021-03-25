@@ -96,19 +96,13 @@ class _RoutePageState extends State<RootPage> {
           subscribeCallback: subscribeCallback,
         );
         break;
-      /*case AuthStatus.INVITE:
-        globalKey.logoutCallback = logoutCallback;
-        Provider.of<UserModel>(context, listen: false)
-            .signIn('invite');
-        MyNavigator.goToHome(context);
-        break;*/
       case AuthStatus.LOGGED_IN:
         globalKey.logoutCallback = logoutCallback;
         if (_userId.length > 0 && _userId != null) {
           print(_userId);
           Provider.of<UserModel>(context, listen: false).signIn(user);
-          MyNavigator.goToAppairage(context);
-          //MyNavigator.goToHome(context);
+          //MyNavigator.goToAppairage(context);
+          MyNavigator.goToHome(context);
         } else
           return buildWaitingScreen();
         break;
