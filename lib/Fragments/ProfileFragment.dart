@@ -51,6 +51,10 @@ class ProfileFragment extends StatelessWidget {
                       color: Colors.blueAccent,
                       child: Text("Change music"),
                       onPressed: () => _openFileExplorer()),
+                  RaisedButton(
+                      color: Colors.blueAccent,
+                      child: Text("Mes appareils"),
+                      onPressed: () => MyNavigator.goToMyAlarms()),
                   FlatButton(
                     color: Colors.pink,
                     child: Text('Se déconnecter'),
