@@ -5,22 +5,22 @@ abstract class DBProvider {
   main();
   Future<bool> setLastConnexion(User user);
   Future<bool> setProfilInfo(User user);
-  Stream<QuerySnapshot> getHistory(int limit);
+  Stream<QuerySnapshot> getHistory(int limit, String alarmId);
   Future<void> setAlarmToProfil(String alarmId, String userId);
   Future<DocumentSnapshot> getProfilInfo(String profile);
   Future<DocumentSnapshot> getProfile(String userId);
   Stream<DocumentSnapshot> alarm(String alarmId);
   Stream<QuerySnapshot> usersAlarm(String userId);
-  setIsActive(bool isActive);
+  setIsActive(bool isActive, String alarmId);
 }
 
 class DataBase implements DBProvider {
   FirebaseFirestore databaseReference;
 
-  Stream<QuerySnapshot> getHistory(int limit) {
+  Stream<QuerySnapshot> getHistory(int limit, String alarmId) {
     return databaseReference
         .collection("alarms")
-        .doc("xshiCmkPvzXIfBCHiju3")
+        .doc(alarmId)
         .collection("history")
         .orderBy('date', descending: true)
         .limit(limit)
@@ -98,10 +98,10 @@ class DataBase implements DBProvider {
     return databaseReference.collection("alarms").doc(alarmId).snapshots();
   }
 
-  setIsActive(bool isActive) {
+  setIsActive(bool isActive, String alarmId) {
     databaseReference
         .collection("alarms")
-        .doc("xshiCmkPvzXIfBCHiju3")
+        .doc(alarmId)
         .update({"isActive": isActive});
   }
 

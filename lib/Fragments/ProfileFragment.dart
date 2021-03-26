@@ -21,50 +21,48 @@ class ProfileFragment extends StatelessWidget {
     }
 
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          children: [
-            Center(
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        "https://i.ytimg.com/vi/zPCZWn_iWb0/maxresdefault.jpg"),
-                    radius: 80,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 30, top: 10),
-                    child: Text(
-                      "Tony Bigeard",
-                      style: TextStyle(fontSize: 20),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          "https://i.ytimg.com/vi/zPCZWn_iWb0/maxresdefault.jpg"),
+                      radius: 80,
                     ),
-                  ),
-                  Text("Owner"),
-                  Text("exemple@gmail.com"),
-                  RaisedButton(
-                      color: Colors.blueAccent,
-                      child: Text("Edit Profile"),
-                      onPressed: () {}),
-                  RaisedButton(
-                      color: Colors.blueAccent,
-                      child: Text("Change music"),
-                      onPressed: () => _openFileExplorer()),
-                  RaisedButton(
-                      color: Colors.blueAccent,
-                      child: Text("Mes appareils"),
-                      onPressed: () => MyNavigator.goToMyAlarms()),
-                  FlatButton(
-                    color: Colors.pink,
-                    child: Text('Se déconnecter'),
-                    onPressed: () {
-                      auth.signOut().then((value) => MyNavigator.goToRoot());
-                    },
-                  ),
-                ],
-              ),
-            )
-          ],
+                    Container(
+                      margin: EdgeInsets.only(bottom: 30, top: 10),
+                      child: Text(
+                        firebaseUser.displayName,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    Text("Propriétaire"),
+                    Text(firebaseUser.email),
+                    RaisedButton(
+                        color: Colors.blueAccent,
+                        child: Text("Change music"),
+                        onPressed: () => _openFileExplorer()),
+                    RaisedButton(
+                        color: Colors.blueAccent,
+                        child: Text("Mes appareils"),
+                        onPressed: () => MyNavigator.goToMyAlarms()),
+                    FlatButton(
+                      color: Colors.pink,
+                      child: Text('Se déconnecter'),
+                      onPressed: () {
+                        auth.signOut().then((value) => MyNavigator.goToRoot());
+                      },
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
